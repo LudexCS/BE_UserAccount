@@ -1,4 +1,4 @@
-import redis from "../config/redis.clinet";
+import redis from "../config/redis.config";
 
 export const storeRefreshToken = async (userId: string, refreshToken: string): Promise<void> => {
     const key = `refresh:${userId}`;
