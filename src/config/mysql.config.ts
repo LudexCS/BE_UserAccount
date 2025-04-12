@@ -17,7 +17,7 @@ const AppDataSource = new DataSource({
     database: DB_NAME,
     synchronize: false,
     logging: true,
-    entities: [ Account ],
+    entities: [ Account, ],
     migrations: [],
     subscribers: [],
 });

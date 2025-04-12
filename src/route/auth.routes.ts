@@ -3,6 +3,7 @@ import { loginControl } from "../controller/login.controller";
 import { Request, Response } from 'express';
 import {logoutControl} from "../controller/logout.controller";
 import {reissueControl} from "../controller/reissue.controller";
+import { registerRequest, registerVerify } from '../controller/auth.controller';
 
 const router: Router = Router();
 
@@ -76,5 +77,9 @@ router.post('/reissue', async (req: Request, res: Response): Promise<void> => {
         }
     }
 });
+
+router.post('/register-request', registerRequest);
+
+router.post('/register-verify', registerVerify);
 
 export default router;
