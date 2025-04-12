@@ -1,10 +1,16 @@
 import nodemailer from 'nodemailer';
-
-const pendingUsers = new Map<string, any>();
+import redis from "../config/redis.config";
 
 export const sendVerificationEmail = async (email: string) => {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    pendingUsers.set(email, { code, expiresAt: Date.now() + 600_000 }); // 10분
+    const expireTime = 600;
+
+    const data = {
+        code,
+        expiresAt: Date.now() + expireTime * 1000
+    }
+
+    await redis.set(`email:${email}`, JSON.stringify(data), { EX: expireTime });
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -22,17 +28,37 @@ export const sendVerificationEmail = async (email: string) => {
     });
 };
 
-export const setPendingUser = (email: string, data: any) => {
-    const entry = pendingUsers.get(email);
-    if (!entry) throw new Error('이메일 인증 요청 먼저 해야 함');
-    pendingUsers.set(email, { ...entry, ...data });
+export const setPendingUser = async (email: string, data: any) => {
+    const key = `email:${email}`;
+    const raw = await redis.get(key);
+    if (!raw) throw new Error('이메일 인증 요청 먼저 해야 함');
+
+    const existing = JSON.parse(raw);
+    const updated = { ...existing, ...data };
+    await redis.set(key, JSON.stringify(updated), { EX: 600 }); // 만료 다시 설정
 };
 
-export const verifyEmailCode = (email: string, code: string): boolean => {
-    const entry = pendingUsers.get(email);
-    return entry && entry.code === code && entry.expiresAt > Date.now();
+export const verifyEmailCode = async (email: string, code: string): Promise<boolean> => {
+    const raw = await redis.get(`email:${email}`);
+    if (!raw) return false;
+
+    const data = JSON.parse(raw);
+
+    if (data.code !== code || data.expiresAt <= Date.now())
+        return false;
+
+    return true;
 };
 
-export const getVerifiedUserData = (email: string) => {
-    return pendingUsers.get(email);
+export const getVerifiedUserData = async (email: string) => {
+    const raw = await redis.get(`email:${email}`);
+    if (!raw) {
+        throw new Error('해당 이메일에 대한 인증 데이터가 존재하지 않습니다.');
+    }
+    try {
+        const data = JSON.parse(raw);
+        return data;
+    } catch (e) {
+        throw new Error('저장된 인증 데이터를 파싱하는 데 실패했습니다.');
+    }
 };

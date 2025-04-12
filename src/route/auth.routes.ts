@@ -3,7 +3,8 @@ import { loginControl } from "../controller/login.controller";
 import { Request, Response } from 'express';
 import {logoutControl} from "../controller/logout.controller";
 import {reissueControl} from "../controller/reissue.controller";
-import { registerRequest, registerVerify } from '../controller/auth.controller';
+import { registerRequest, registerVerify, completeRegistration } from '../controller/register.controller';
+import { checkEmail, checkNickname } from '../controller/register.controller';
 
 const router: Router = Router();
 
@@ -78,8 +79,52 @@ router.post('/reissue', async (req: Request, res: Response): Promise<void> => {
     }
 });
 
-router.post('/register-request', registerRequest);
+router.post('/register-request', async (req: Request, res: Response) => {
+    try {
+        await registerRequest(req, res);
+        res.status(200).json({ message: '인증 이메일 전송됨' });
+    } catch (err) {
+        res.status(500).json({ message: '인증 요청 실패' });
+    }
+});
 
-router.post('/register-verify', registerVerify);
+router.post('/register-verify', async (req: Request, res: Response): Promise<void> => {
+    try {
+        const verified = await registerVerify(req, res);
+        if (!verified) {
+            return void res.status(400).json({ message: '인증 코드가 잘못되었거나 만료됨' });
+        }
+        res.status(200).json({ message: '이메일 인증 완료' });
+    } catch (err) {
+        res.status(500).json({ message: '서버 오류' });
+    }
+});
+
+router.post('/register-complete', async (req: Request, res: Response) => {
+    try {
+        await completeRegistration(req, res);
+        res.status(201).json({ message: '회원가입 성공' });
+    } catch (err: any) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+router.post('/check-email', async (req: Request, res: Response) => {
+    try {
+        await checkEmail(req, res);
+        res.status(200).json({ message: '사용 가능한 이메일입니다.' });
+    } catch (err: any) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+router.post('/check-nickname', async (req: Request, res: Response) => {
+    try {
+        await checkNickname(req, res);
+        res.status(200).json({ message: '사용 가능한 닉네임입니다.' });
+    } catch (err: any) {
+        res.status(400).json({ message: err.message });
+    }
+});
 
 export default router;
