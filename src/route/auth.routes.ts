@@ -5,6 +5,7 @@ import {logoutControl} from "../controller/logout.controller";
 import {reissueControl} from "../controller/reissue.controller";
 import { registerRequest, registerVerify, completeRegistration } from '../controller/register.controller';
 import { checkEmail, checkNickname } from '../controller/register.controller';
+import { deleteAccountController } from '../controllers/account.controller';
 
 const router: Router = Router();
 
@@ -124,6 +125,16 @@ router.post('/check-nickname', async (req: Request, res: Response) => {
         res.status(200).json({ message: '사용 가능한 닉네임입니다.' });
     } catch (err: any) {
         res.status(400).json({ message: err.message });
+    }
+});
+
+router.delete('/account-delete', async (req: Request, res: Response) => {
+    try {
+        await deleteAccountController(req);
+        res.status(200).json({ message: '계정 삭제 완료' });
+    } catch (error: any) {
+        console.error('계정 삭제 실패:', error);
+        res.status(400).json({ error: error.message || '계정 삭제 실패' });
     }
 });
 

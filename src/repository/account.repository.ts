@@ -37,3 +37,15 @@ export const isEmailDuplicate = async (email: string): Promise<boolean> => {
     const existing = await accountRepo.findOne({ where: { email } });
     return !!existing;
 };
+
+export async function deleteAccountByEmail(email: string): Promise<void> {
+    const account = await accountRepo.findOne({
+        where: { email },
+    });
+
+    if (!account) {
+        throw new Error('계정이 없습니다.');
+    }
+
+    await accountRepo.delete({ id: account.id });
+}
