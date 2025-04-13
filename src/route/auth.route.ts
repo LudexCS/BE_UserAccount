@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { loginControl } from "../controller/login.controller";
 import { Request, Response } from 'express';
+import { loginControl } from "../controller/login.controller";
 import {logoutControl} from "../controller/logout.controller";
 import {reissueControl} from "../controller/reissue.controller";
 
