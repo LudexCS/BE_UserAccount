@@ -1,5 +1,5 @@
 import * as grpc from '@grpc/grpc-js';
-import { AuthResponse, EmailRequest, UserIdResponse } from '../generated/auth_pb';
+import { AuthResponse, UserIdResponse } from '../generated/auth_pb';
 import { AuthServiceService, IAuthServiceServer } from '../generated/auth_grpc_pb';
 import { verifyToken } from "../service/jwt.service";
 import { JwtPayload } from "jsonwebtoken";
