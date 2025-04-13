@@ -1,0 +1,6 @@
+services:
+  useraccount:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gomdadi/useraccount:latest
