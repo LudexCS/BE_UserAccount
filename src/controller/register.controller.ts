@@ -7,20 +7,22 @@ import {
 } from '../service/email.service';
 import { registerUser } from '../service/register.service';
 import { checkEmailDuplicate, checkNicknameDuplicate } from '../service/register.service';
+import {registerRequestDto} from "../dto/registerRequest.dto";
+import {verifyEmailCodeDto} from "../dto/verifyEmailCode.dto";
 
-export const registerRequest = async (req: Request, res: Response) => {
-    const { name, email, password } = req.body;
-    await sendVerificationEmail(email);
-    setPendingUser(email, { name, password});
+export const sendVerifyEmailControl = async (req: Request, res: Response) => {
+    const userData = req.body as registerRequestDto;
+    await sendVerificationEmail(userData.email);
+    setPendingUser(userData);
 };
 
-export const registerVerify = async (req: Request, res: Response): Promise<boolean> => {
-    const { email, code } = req.body;
-    return verifyEmailCode(email, code)
+export const getVerifyEmailCodeControl = async (req: Request, res: Response): Promise<boolean> => {
+    const emailandCode = req.body as verifyEmailCodeDto;
+    return verifyEmailCode(emailandCode)
 };
 
 //이메일 인증이 끝난 회원이 회원가입 버튼을 눌렀을때 작동하도록 할 함수입니다.
-export const completeRegistration = async (req: Request, res: Response): Promise<void> => {
+export const completeRegisterControl = async (req: Request, res: Response): Promise<void> => {
     const { email, password, repeatPassword } = req.body;
 
     if (password !== repeatPassword) {
@@ -41,7 +43,7 @@ export const completeRegistration = async (req: Request, res: Response): Promise
     await registerUser(registrationData);  // 비밀번호와 함께 사용자 데이터 DB에 등록
 };
 
-export const checkEmail = async (req: Request, res: Response) : Promise<void> => {
+export const checkEmailControl = async (req: Request, res: Response) : Promise<void> => {
     const { email } = req.body;
 
     if (!email || typeof email !== 'string') {
@@ -50,7 +52,7 @@ export const checkEmail = async (req: Request, res: Response) : Promise<void> =>
     await checkEmailDuplicate(email);
 };
 
-export const checkNickname = async (req: Request, res: Response) : Promise<void> => {
+export const checkNicknameControl = async (req: Request, res: Response) : Promise<void> => {
     const { nickname } = req.body;
 
     if (!nickname || typeof nickname !== 'string') {

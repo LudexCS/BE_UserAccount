@@ -3,8 +3,8 @@ import { loginControl } from "../controller/login.controller";
 import { Request, Response } from 'express';
 import {logoutControl} from "../controller/logout.controller";
 import {reissueControl} from "../controller/reissue.controller";
-import { registerRequest, registerVerify, completeRegistration } from '../controller/register.controller';
-import { checkEmail, checkNickname } from '../controller/register.controller';
+import { sendVerifyEmailControl, getVerifyEmailCodeControl, completeRegisterControl } from '../controller/register.controller';
+import { checkEmailControl, checkNicknameControl } from '../controller/register.controller';
 import { deleteAccountController } from '../controllers/account.controller';
 
 const router: Router = Router();
@@ -80,61 +80,60 @@ router.post('/reissue', async (req: Request, res: Response): Promise<void> => {
     }
 });
 
-router.post('/register-request', async (req: Request, res: Response) => {
+router.post('/register/request', async (req: Request, res: Response) => {
     try {
-        await registerRequest(req, res);
+        await sendVerifyEmailControl(req, res);
         res.status(200).json({ message: '인증 이메일 전송됨' });
     } catch (err) {
         res.status(500).json({ message: '인증 요청 실패' });
     }
 });
 
-router.post('/register-verify', async (req: Request, res: Response): Promise<void> => {
+router.post('/register/verify', async (req: Request, res: Response): Promise<void> => {
     try {
-        const verified = await registerVerify(req, res);
+        const verified = await getVerifyEmailCodeControl(req, res);
         if (!verified) {
             return void res.status(400).json({ message: '인증 코드가 잘못되었거나 만료됨' });
         }
         res.status(200).json({ message: '이메일 인증 완료' });
     } catch (err) {
-        res.status(500).json({ message: '서버 오류' });
+        res.status(400).json({ message: (err as Error).message });
     }
 });
 
-router.post('/register-complete', async (req: Request, res: Response) => {
+router.post('/register/complete', async (req: Request, res: Response) => {
     try {
-        await completeRegistration(req, res);
+        await completeRegisterControl(req, res);
         res.status(201).json({ message: '회원가입 성공' });
-    } catch (err: any) {
-        res.status(400).json({ message: err.message });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
     }
 });
 
-router.post('/check-email', async (req: Request, res: Response) => {
+router.post('/check/email', async (req: Request, res: Response) => {
     try {
-        await checkEmail(req, res);
+        await checkEmailControl(req, res);
         res.status(200).json({ message: '사용 가능한 이메일입니다.' });
-    } catch (err: any) {
-        res.status(400).json({ message: err.message });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
     }
 });
 
-router.post('/check-nickname', async (req: Request, res: Response) => {
+router.post('/check/nickname', async (req: Request, res: Response) => {
     try {
-        await checkNickname(req, res);
+        await checkNicknameControl(req, res);
         res.status(200).json({ message: '사용 가능한 닉네임입니다.' });
-    } catch (err: any) {
-        res.status(400).json({ message: err.message });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
     }
 });
 
-router.delete('/account-delete', async (req: Request, res: Response) => {
+router.delete('/protected/delete/account', async (req: Request, res: Response) => {
     try {
         await deleteAccountController(req);
         res.status(200).json({ message: '계정 삭제 완료' });
-    } catch (error: any) {
-        console.error('계정 삭제 실패:', error);
-        res.status(400).json({ error: error.message || '계정 삭제 실패' });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
     }
 });
 

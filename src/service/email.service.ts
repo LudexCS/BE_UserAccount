@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer';
 import redis from "../config/redis.config";
+import {registerRequestDto} from "../dto/registerRequest.dto";
+import {verifyEmailCodeDto} from "../dto/verifyEmailCode.dto";
 
 export const sendVerificationEmail = async (email: string) => {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -28,23 +30,21 @@ export const sendVerificationEmail = async (email: string) => {
     });
 };
 
-export const setPendingUser = async (email: string, data: any) => {
-    const key = `email:${email}`;
+export const setPendingUser = async (userData: registerRequestDto) => {
+    const key = `email:${userData.email}`;
     const raw = await redis.get(key);
     if (!raw) throw new Error('이메일 인증 요청 먼저 해야 함');
 
-    const existing = JSON.parse(raw);
-    const updated = { ...existing, ...data };
-    await redis.set(key, JSON.stringify(updated), { EX: 600 }); // 만료 다시 설정
+    await redis.set(key, JSON.stringify(userData), { EX: 600 }); // 만료 다시 설정
 };
 
-export const verifyEmailCode = async (email: string, code: string): Promise<boolean> => {
-    const raw = await redis.get(`email:${email}`);
+export const verifyEmailCode = async (emailandCode: verifyEmailCodeDto): Promise<boolean> => {
+    const raw = await redis.get(`email:${emailandCode.email}`);
     if (!raw) return false;
 
     const data = JSON.parse(raw);
 
-    if (data.code !== code || data.expiresAt <= Date.now())
+    if (data.code !== emailandCode.code || data.expiresAt <= Date.now())
         return false;
 
     return true;
