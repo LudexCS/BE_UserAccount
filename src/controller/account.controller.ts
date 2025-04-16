@@ -1,5 +1,4 @@
 import {Request} from 'express';
-import {AccountDto} from '../dto/account.dto';
 import {findAccount} from "../service/account.service";
 
 export const getAccountControl = async(req: Request) => {
