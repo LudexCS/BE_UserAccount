@@ -1,5 +1,11 @@
 export interface CryptoWalletDto {
     address: string;
-    label?: string;
-    createdAt?: Date
+    createdAt: Date;
 }
+
+export const toCryptoWalletDto = (address: string, createdAt: Date): CryptoWalletDto => {
+    return {
+        address,
+        createdAt
+    };
+};
