@@ -1,5 +1,4 @@
-import AppDataSource from '../config/mysql.config;
-import { deleteAccountByEmail } from '../repositories/account.repository';
+import { deleteAccountByEmail } from '../repository/account.repository';
 
 export async function deleteAccount(email: string): Promise<void> {
     try {

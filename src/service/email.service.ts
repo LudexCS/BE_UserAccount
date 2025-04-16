@@ -11,7 +11,7 @@ export const sendVerificationEmail = async (email: string) => {
         expiresAt: Date.now() + expireTime * 1000
     }
 
-    await redis.set(`email:${email}`, JSON.stringify(data), { EX: expireTime });
+    await redis.set(`email:${email}`, JSON.stringify(data), 'EX', expireTime);
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
