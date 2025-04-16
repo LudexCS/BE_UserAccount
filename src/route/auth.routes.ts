@@ -101,7 +101,7 @@ router.post('/register/verify', async (req: Request, res: Response): Promise<voi
     }
 });
 
-router.post('/register/complete', async (req: Request, res: Response) => {
+router.post('/register/signup', async (req: Request, res: Response) => {
     try {
         await completeRegisterControl(req, res);
         res.status(201).json({ message: '회원가입 성공' });
