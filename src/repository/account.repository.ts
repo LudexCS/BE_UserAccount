@@ -4,8 +4,8 @@ import { Repository } from "typeorm";
 
 const accountRepo: Repository<Account> = AppDataSource.getRepository(Account);
 
-export const findByEmail = async (email: string) => {
-    const account = await accountRepo.findOne({where: {email}, select: ['password', 'role']});
+export const findByEmail = async (email: string): Promise<Account> => {
+    const account = await accountRepo.findOne({ where: {email} });
     if (!account) {
         throw new Error(`Invalid email`);
     }
