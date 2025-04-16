@@ -1,5 +1,5 @@
 import {AccountDto, toAccountDto} from "../dto/account.dto";
-import {findByEmail} from "../repository/account.repository";
+import {deleteAccountByEmail, findByEmail} from "../repository/account.repository";
 import {Account} from "../entity/account.entity";
 import {CryptoWallet} from "../entity/crypto_wallet.entity";
 import {findByUserId} from "../repository/crypto_wallet.repository";
@@ -16,3 +16,11 @@ export const findAccount = async (email: string): Promise<AccountDto> => {
         throw error;
     }
 };
+
+export async function deleteAccount(email: string): Promise<void> {
+    try {
+        await deleteAccountByEmail(email);
+    }catch(err){
+        throw err;
+    }
+}

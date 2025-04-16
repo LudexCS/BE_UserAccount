@@ -1,6 +1,6 @@
 import {Request} from 'express';
 import {findAccount} from "../service/account.service";
-import {deleteAccount} from "../service/account.serviece";
+import {deleteAccount} from "../service/account.service";
 
 export const getAccountControl = async(req: Request) => {
     try {
