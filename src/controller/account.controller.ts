@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
+import { deleteAccount} from "../service/account.serviece";
 
 export async function deleteAccountControl(req: Request, res: Response) {
-    //issue#1 보고 고치기(jwt파싱 후 이메일 데이터 가져오기)
+    const email = req.user;
+    try{
+        await deleteAccount(email);
+    }catch(err){
+        throw err;
+    }
 }

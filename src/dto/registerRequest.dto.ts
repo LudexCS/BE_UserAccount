@@ -1,6 +1,6 @@
 import { IsEmail, IsString, Matches, Length } from 'class-validator';
 
-export class registerRequestDto {
+export class RegisterRequestDto {
     @IsString()
     @Length(2, 10, { message: '닉네임은 2자 이상 20자 이하이어야 합니다.' })
     nickname: string;
@@ -12,4 +12,5 @@ export class registerRequestDto {
         message: '비밀번호는 8~16자, 문자와 숫자를 포함해야 합니다.',
     })
     password: string;
+    repeatPassword: string;
 }

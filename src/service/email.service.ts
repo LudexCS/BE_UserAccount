@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 import redis from "../config/redis.config";
-import {registerRequestDto} from "../dto/registerRequest.dto";
-import {verifyEmailCodeDto} from "../dto/verifyEmailCode.dto";
+import {VerifyEmailCodeDto} from "../dto/verifyEmailCode.dto";
 
 export const sendVerificationEmail = async (email: string) => {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -30,35 +29,16 @@ export const sendVerificationEmail = async (email: string) => {
     });
 };
 
-export const setPendingUser = async (userData: registerRequestDto) => {
-    const key = `email:${userData.email}`;
-    const raw = await redis.get(key);
-    if (!raw) throw new Error('이메일 인증 요청 먼저 해야 함');
-
-    await redis.set(key, JSON.stringify(userData), { EX: 600 }); // 만료 다시 설정
-};
-
-export const verifyEmailCode = async (emailandCode: verifyEmailCodeDto): Promise<boolean> => {
-    const raw = await redis.get(`email:${emailandCode.email}`);
-    if (!raw) return false;
+export const verifyEmailCode = async (verifyEmailCodeDto: VerifyEmailCodeDto): Promise<boolean> => {
+    const raw = await redis.get(`email:${verifyEmailCodeDto.email}`);
+    if (!raw){
+        throw new Error('이메일 정보 가져오기 실패');
+    }
 
     const data = JSON.parse(raw);
 
-    if (data.code !== emailandCode.code || data.expiresAt <= Date.now())
+    if (data.code !== verifyEmailCodeDto.code || data.expiresAt <= Date.now())
         return false;
 
     return true;
-};
-
-export const getVerifiedUserData = async (email: string) => {
-    const raw = await redis.get(`email:${email}`);
-    if (!raw) {
-        throw new Error('해당 이메일에 대한 인증 데이터가 존재하지 않습니다.');
-    }
-    try {
-        const data = JSON.parse(raw);
-        return data;
-    } catch (e) {
-        throw new Error('저장된 인증 데이터를 파싱하는 데 실패했습니다.');
-    }
 };
