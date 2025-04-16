@@ -1,5 +1,6 @@
 import {Request} from 'express';
 import {findAccount} from "../service/account.service";
+import {deleteAccount} from "../service/account.serviece";
 
 export const getAccountControl = async(req: Request) => {
     try {
@@ -12,3 +13,15 @@ export const getAccountControl = async(req: Request) => {
         throw error;
     }
 };
+
+export async function deleteAccountControl(req: Request) {
+    const email = req.user;
+    if (!email) {
+        throw new Error("email doesn't exist, check your token");
+    }
+    try {
+        await deleteAccount(email);
+    } catch (error) {
+        throw error;
+    }
+}

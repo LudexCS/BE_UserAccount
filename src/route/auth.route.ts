@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 import { loginControl } from "../controller/login.controller";
 import {logoutControl} from "../controller/logout.controller";
 import {reissueControl} from "../controller/reissue.controller";
-import {getAccountControl} from "../controller/account.controller";
+import { sendVerifyEmailControl, getVerifyEmailCodeControl, completeRegisterControl } from '../controller/register.controller';
+import { checkEmailControl, checkNicknameControl } from '../controller/register.controller';
+import {getAccountControl, deleteAccountControl} from "../controller/account.controller";
 import {AccountDto} from "../dto/account.dto";
 
 const router: Router = Router();
@@ -91,6 +93,63 @@ router.get('/get/account', async (req: Request, res: Response): Promise<void> =>
            res.status(500).json({message: "Server Error"});
        }
    }
+});
+
+router.post('/register/request', async (req: Request, res: Response) => {
+    try {
+        await sendVerifyEmailControl(req, res);
+        res.status(200).json({ message: '인증 이메일 전송됨' });
+    } catch (err) {
+        res.status(500).json({ message: '인증 요청 실패' });
+    }
+});
+
+router.post('/register/verify', async (req: Request, res: Response): Promise<void> => {
+    try {
+        const verified = await getVerifyEmailCodeControl(req, res);
+        if (!verified) {
+            return void res.status(400).json({ message: '인증 코드가 잘못되었거나 만료됨' });
+        }
+        res.status(200).json({ message: '이메일 인증 완료' });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
+    }
+});
+
+router.post('/register/signup', async (req: Request, res: Response) => {
+    try {
+        await completeRegisterControl(req, res);
+        res.status(201).json({ message: '회원가입 성공' });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
+    }
+});
+
+router.post('/check/email', async (req: Request, res: Response) => {
+    try {
+        await checkEmailControl(req, res);
+        res.status(200).json({ message: '사용 가능한 이메일입니다.' });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
+    }
+});
+
+router.post('/check/nickname', async (req: Request, res: Response) => {
+    try {
+        await checkNicknameControl(req, res);
+        res.status(200).json({ message: '사용 가능한 닉네임입니다.' });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
+    }
+});
+
+router.delete('/protected/delete/account', async (req: Request, res: Response) => {
+    try {
+        await deleteAccountControl(req);
+        res.status(200).json({ message: '계정 삭제 완료' });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
+    }
 });
 
 export default router;
