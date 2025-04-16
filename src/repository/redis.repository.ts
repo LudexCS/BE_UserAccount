@@ -1,7 +1,7 @@
 import redis from "../config/redis.config";
 
-export const storeRefreshToken = async (userId: string, refreshToken: string): Promise<void> => {
-    const key = `refresh:${userId}`;
+export const storeRefreshToken = async (email: string, refreshToken: string): Promise<void> => {
+    const key = `refresh:${email}`;
     const ttl = Number(process.env.REFRESH_EXP) || 60 * 60 * 24 * 7;
 
     try {
@@ -12,8 +12,8 @@ export const storeRefreshToken = async (userId: string, refreshToken: string): P
     }
 };
 
-export const hasRefreshToken = async (userId: string): Promise<boolean> => {
-    const key = `refresh:${userId}`;
+export const hasRefreshToken = async (email: string): Promise<boolean> => {
+    const key = `refresh:${email}`;
     try {
         const exists = await redis.exists(key);
         return exists === 1;
@@ -23,8 +23,8 @@ export const hasRefreshToken = async (userId: string): Promise<boolean> => {
     }
 };
 
-export const deleteRefreshToken = async (userId: string): Promise<void> => {
-    const key = `refresh:${userId}`;
+export const deleteRefreshToken = async (email: string): Promise<void> => {
+    const key = `refresh:${email}`;
     try {
         await redis.del(key);
     } catch (error) {
@@ -33,8 +33,8 @@ export const deleteRefreshToken = async (userId: string): Promise<void> => {
     }
 };
 
-export const isRefreshTokenEqual = async (userId: string, tokenToCompare: string): Promise<boolean> => {
-    const key = `refresh:${userId}`;
+export const isRefreshTokenEqual = async (email: string, tokenToCompare: string): Promise<boolean> => {
+    const key = `refresh:${email}`;
     try {
         const storedToken = await redis.get(key);
         return storedToken === tokenToCompare;

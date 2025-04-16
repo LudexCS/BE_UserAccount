@@ -1,5 +1,15 @@
+import {JwtPayload} from "jsonwebtoken";
+
+declare global {
+    namespace Express {
+        interface Request {
+            user?: string;
+        }
+    }
+}
+
 import { Request, Response, NextFunction } from 'express';
-import { isAuthenticated } from '../service/jwt.service'
+import {verifyToken} from '../service/jwt.service';
 
 const jwtGuard = (req: Request, res: Response, next: NextFunction): void => {
     const jwtHeader: string | undefined = req.headers.authorization;
@@ -12,7 +22,14 @@ const jwtGuard = (req: Request, res: Response, next: NextFunction): void => {
     const token = jwtHeader.split(' ')[1];
 
     try {
-        isAuthenticated(token);
+        const payload: JwtPayload = verifyToken(token);
+        const email = payload.sub;
+        if (!email) {
+            res.status(401).json({ message: 'Missing or invalid email in JWT' });
+            return;
+        }
+        // req.user 필드에 email 정보를 추가. 이제 req.user로 email을 받아올 수 있음
+        req.user = email;
         next();
     } catch (error) {
         res.status(401).json({ message: (error as Error).message });
