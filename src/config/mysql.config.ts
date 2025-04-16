@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { Account } from '../entity/account.entity'; // 엔티티 경로에 맞게 설정
+import { CryptoWallet } from '../entity/crypto_wallet.entity';
 
 const HOST = process.env.DB_HOST || 'localhost';
 const PORT = Number(process.env.DB_PORT) || 3306;
@@ -17,7 +18,7 @@ const AppDataSource = new DataSource({
     database: DB_NAME,
     synchronize: false,
     logging: true,
-    entities: [ Account ],
+    entities: [ Account, CryptoWallet ],
     migrations: [],
     subscribers: [],
 });
