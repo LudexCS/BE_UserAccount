@@ -40,5 +40,6 @@ export const verifyEmailCode = async (verifyEmailCodeDto: VerifyEmailCodeDto): P
     if (data.code !== verifyEmailCodeDto.code || data.expiresAt <= Date.now())
         return false;
 
+    await redis.del(`email:${verifyEmailCodeDto.email}`);
     return true;
 };
