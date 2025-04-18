@@ -1,11 +1,6 @@
-version: '3.8'
-
 services:
   useraccount:
-    container_name: ${IMAGE_NAME}-container
     build:
       context: .
       dockerfile: Dockerfile
-    image: ${DOCKER_USERNAME}/${IMAGE_NAME}:latest
-    ports:
-      - "3000:3000"
+    image: gomdadi/useraccount:latest

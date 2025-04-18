@@ -16,6 +16,9 @@ RUN npm install -g typescript ts-node
 # 6. 소스 코드 복사
 COPY . .
 
+# gRPC 코드 생성
+RUN npm run generate:proto
+
 # 7. TypeScript 빌드 실행
 RUN npm run build
 
