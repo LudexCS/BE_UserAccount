@@ -10,7 +10,10 @@ import cors from 'cors';
 const app : Express = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+}));
 
 // '/api/protected/*'이면 인증 미들웨어를 거침
 app.use('/api/protected', jwtGuard);
