@@ -5,10 +5,12 @@ import registerRoute from "./route/register.route";
 import validationRoute from "./route/validation.route";
 import jwtGuard from "./middleware/jwt.guard";
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const app : Express = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 // '/api/protected/*'이면 인증 미들웨어를 거침
 app.use('/api/protected', jwtGuard);
