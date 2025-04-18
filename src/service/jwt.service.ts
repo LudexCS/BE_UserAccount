@@ -2,8 +2,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import {JwtPayloadDto} from "../dto/jwtPayload.dto";
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const ACCESS_EXP = Number(process.env.ACCESS_EXP) || 60 * 5;
-const REFRESH_EXP = Number(process.env.REFRESH_EXP) || 60 * 60 * 24 * 7;
+const ACCESS_EXP = Number(process.env.ACCESS_EXP);
+const REFRESH_EXP = Number(process.env.REFRESH_EXP);
 
 export const generatePayload = (category: "access" | "refresh", userId: string, role: "USER" | "ADMIN"): JwtPayload => {
     const now = Math.floor(Date.now() / 1000); // current time

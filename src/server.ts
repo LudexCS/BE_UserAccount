@@ -4,7 +4,7 @@ import AppDataSource from './config/mysql.config';
 import { startGrpcServer } from './grpc/auth.server';
 
 dotenv.config();
-const PORT = process.env.PORT;
+const PORT = 3000;
 
 async function connectAndStart() {
     let retries = 5;

@@ -2,7 +2,7 @@ import redis from "../config/redis.config";
 
 export const storeRefreshToken = async (email: string, refreshToken: string): Promise<void> => {
     const key = `refresh:${email}`;
-    const ttl = Number(process.env.REFRESH_EXP) || 60 * 60 * 24 * 7;
+    const ttl = Number(process.env.REFRESH_EXP);
 
     try {
         await redis.set(key, refreshToken, 'EX', ttl);
