@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package useraccount;
+
+message AuthRequest {
+  string jwt = 1;
+}
+
+message AuthResponse {
+  string email = 1;
+}
+
+message EmailRequest {
+  string email = 1;
+}
+
+message UserIdResponse {
+  int64 user_id = 1;
+}
+
+service AuthService {
+  rpc AuthByJWT(AuthRequest) returns (AuthResponse);
+  rpc GetUserIdByEmail(EmailRequest) returns (UserIdResponse);
+}
