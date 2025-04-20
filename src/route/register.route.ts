@@ -12,7 +12,7 @@ router.post('/request', async (req: Request, res: Response) => {
         await sendVerifyEmailControl(req);
         res.status(200).json({ message: '인증 이메일 전송됨' });
     } catch (err) {
-        res.status(500).json({ message: '인증 요청 실패' });
+        res.status(500).json({ message: (err as Error).message });
     }
 });
 
