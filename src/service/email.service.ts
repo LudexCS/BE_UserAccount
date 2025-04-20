@@ -20,6 +20,7 @@ export const sendVerificationEmail = async (email: string) => {
             pass: process.env.MAIL_PASS,
         },
     });
+    // .env injection test
     console.log('MAIL_USER:', process.env.MAIL_USER);
     console.log('MAIL_PASS:', process.env.MAIL_PASS);
 
