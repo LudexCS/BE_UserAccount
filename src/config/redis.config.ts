@@ -1,7 +1,7 @@
 import Redis from 'ioredis';
 
 const redis = new Redis({
-    host: 'redis',
+    host: '127.0.0.1',
     port: 6379,
     // password: process.env.REDIS_PASSWORD, // 필요 시
 });
