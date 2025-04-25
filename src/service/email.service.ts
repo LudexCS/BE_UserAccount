@@ -21,10 +21,6 @@ export const sendVerificationEmail = async (email: string) => {
         },
     });
 
-    // .env injection test
-    console.log('MAIL_USER:', process.env.MAIL_USER);
-    console.log('MAIL_PASS:', process.env.MAIL_PASS);
-
     await transporter.sendMail({
         from: process.env.MAIL_USER,
         to: email,
