@@ -52,7 +52,8 @@ export async function startGrpcServer() {
                 return reject(err);
             }
             console.log(`gRPC AuthService running on port ${port}`);
-            server.start();
+            // deprecation
+            // server.start();
             resolve();
         });
     });

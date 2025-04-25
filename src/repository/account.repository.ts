@@ -26,9 +26,9 @@ export const createAccount = async ( nickname: string, email: string, password: 
     const hashed = await bcrypt.hash(password, 10);
     try {
         const user = accountRepo.create({
-            nickname,
-            email,
+            email: email,
             password: hashed,
+            nickname: nickname,
             role: Role.USER,
             registeredAt: new Date()
         })
