@@ -52,7 +52,7 @@ router.delete('/logout', async (req: Request, res: Response): Promise<void> => {
     }
 });
 
-router.post('/reissue', async (req: Request, res: Response): Promise<void> => {
+router.get('/reissue', async (req: Request, res: Response): Promise<void> => {
     try {
         const [accessToken, refreshToken]: [string, string] = await reissueControl(req);
 
