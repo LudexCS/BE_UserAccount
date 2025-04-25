@@ -13,11 +13,11 @@ export class Account {
     @Column({ name: 'email', unique: true })
     email: string;
 
-    @Column({ name: 'password' })
-    password: string;
-
     @Column({ name: 'nickname', unique: true })
     nickname: string;
+
+    @Column({ name: 'password' })
+    password: string;
 
     @Column({
         type: 'enum',

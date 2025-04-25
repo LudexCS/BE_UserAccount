@@ -21,19 +21,23 @@ export const findIdByEmail = async (email: string) => {
     return account.id;
 };
 
-export const createAccount = async ( email: string, password: string, nickname: string ) => {
+export const createAccount = async ( nickname: string, email: string, password: string ) => {
 
     const hashed = await bcrypt.hash(password, 10);
-
-    const user = accountRepo.create({
-        email,
-        password: hashed,
-        nickname,
-        role: Role.USER,
-        registeredAt: new Date()
-    })
-
-    await accountRepo.save(user)
+    try {
+        const user = accountRepo.create({
+            email: email,
+            password: hashed,
+            nickname: nickname,
+            role: Role.USER,
+            registeredAt: new Date()
+        })
+        await accountRepo.save(user)
+        console.log('Saved ID:', user.id);
+    } catch(err){
+        console.error('❌ 유저 저장 실패:', err);
+        throw err;
+    }
 }
 
 export const isNicknameDuplicate = async (nickname: string): Promise<boolean> => {
@@ -43,6 +47,7 @@ export const isNicknameDuplicate = async (nickname: string): Promise<boolean> =>
 
 export const isEmailDuplicate = async (email: string): Promise<boolean> => {
     const existing = await accountRepo.findOne({ where: { email } });
+    console.log(existing);
     return !!existing;
 };
 

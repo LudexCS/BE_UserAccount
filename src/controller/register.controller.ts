@@ -1,8 +1,10 @@
 import { Request } from 'express';
 import { sendVerificationEmail, verifyEmailCode} from '../service/email.service';
-import { registerUser } from '../service/register.service';
+import {checkEmailDuplicate, checkNicknameDuplicate, registerUser} from '../service/register.service';
 import {VerifyEmailCodeDto} from "../dto/verifyEmailCode.dto";
 import {RegisterRequestDto} from "../dto/registerRequest.dto"
+import { validateOrReject } from 'class-validator';
+import { plainToInstance } from 'class-transformer';
 
 export const sendVerifyEmailControl = async (req: Request,) => {
     const { email } = req.body;
@@ -15,7 +17,9 @@ export const sendVerifyEmailControl = async (req: Request,) => {
 };
 
 export const getVerifyEmailCodeControl = async (req: Request,): Promise<boolean> => {
-    const verifyEmailCodeDto = req.body as VerifyEmailCodeDto;
+    const verifyEmailCodeDto = plainToInstance(VerifyEmailCodeDto, req.body);
+    // 유효성 검사 메서드 추가
+    await validateOrReject(verifyEmailCodeDto);
     try {
         return verifyEmailCode(verifyEmailCodeDto);
     }
@@ -26,12 +30,15 @@ export const getVerifyEmailCodeControl = async (req: Request,): Promise<boolean>
 
 //이메일 인증이 끝난 회원이 회원가입 버튼을 눌렀을때 작동하도록 할 함수입니다.
 export const completeRegisterControl = async (req: Request,): Promise<void> => {
-    const registerRequestDto = req.body as RegisterRequestDto;
-
+    const registerRequestDto = plainToInstance(RegisterRequestDto, req.body);
+    // 유효성 검사 메서드 추가
+    await validateOrReject(registerRequestDto);
     if (registerRequestDto.password !== registerRequestDto.repeatPassword) {
         throw new Error('비밀번호가 일치하지 않습니다.')
     }
     try {
+        await checkEmailDuplicate(registerRequestDto.email);
+        await checkNicknameDuplicate(registerRequestDto.nickname);
         await registerUser(registerRequestDto);  // 비밀번호와 함께 사용자 데이터 DB에 등록
     } catch(err){
         throw err;
