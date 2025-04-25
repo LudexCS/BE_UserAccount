@@ -10,14 +10,14 @@ export class Account {
     @PrimaryGeneratedColumn({ name: 'id' })
     id: number;
 
+    @Column({ name: 'nickname', unique: true })
+    nickname: string;
+
     @Column({ name: 'email', unique: true })
     email: string;
 
     @Column({ name: 'password' })
     password: string;
-
-    @Column({ name: 'nickname', unique: true })
-    nickname: string;
 
     @Column({
         type: 'enum',
