@@ -7,7 +7,6 @@ export const checkEmailControl = async (req: Request,) : Promise<void> => {
     if (!email || typeof email !== 'string') {
         throw new Error('이메일을 입력하세요.')
     }
-    await checkEmailDuplicate(email);
     try {
         await checkEmailDuplicate(email);
     } catch(err){
