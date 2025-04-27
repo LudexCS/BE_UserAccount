@@ -4,7 +4,8 @@ import { loginControl } from "../controller/login.controller";
 import { logoutControl } from "../controller/logout.controller";
 import { reissueControl } from "../controller/reissue.controller";
 
-/* @swagger
+/**
+ * @swagger
  * components:
  *   schemas:
  *     LoginDto:
@@ -29,7 +30,8 @@ import { reissueControl } from "../controller/reissue.controller";
  */
 const router: Router = Router();
 
-/* @swagger
+/**
+ * @swagger
  * /api/auth/login:
  *   post:
  *     summary: 로그인
@@ -95,7 +97,8 @@ const router: Router = Router();
     }
 });
 
-/* @swagger
+/**
+ * @swagger
  * /api/auth/logout:
  *   delete:
  *     summary: 로그아웃
@@ -145,7 +148,7 @@ router.delete('/logout', async (req: Request, res: Response): Promise<void> => {
     }
 });
 
-/*
+/**
  * @swagger
  * /api/auth/reissue:
  *   get:
@@ -183,7 +186,6 @@ router.delete('/logout', async (req: Request, res: Response): Promise<void> => {
  *             schema:
  *               $ref: '#/components/schemas/MessageResponse'
  */
-
 router.get('/reissue', async (req: Request, res: Response): Promise<void> => {
     try {
         const [accessToken, refreshToken]: [string, string] = await reissueControl(req);

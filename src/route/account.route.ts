@@ -31,6 +31,12 @@ import {deleteAccountControl, getAccountControl} from "../controller/account.con
  *           items:
  *             $ref: '#/components/schemas/CryptoWalletDto'
  *           description: 사용자의 암호화폐 지갑 목록
+ *     MessageResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: 응답 메시지
  */
 const router: Router = Router();
 
@@ -55,10 +61,7 @@ const router: Router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/MessageResponse'
  *       401:
  *         description: 인증되지 않은 요청
  *       500:
@@ -66,10 +69,7 @@ const router: Router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/MessageResponse'
  */
 router.get('/get', async (req: Request, res: Response): Promise<void> => {
     try {
@@ -99,20 +99,13 @@ router.get('/get', async (req: Request, res: Response): Promise<void> => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "계정 삭제 완료"
+ *               $ref: '#/components/schemas/MessageResponse'
  *       400:
  *         description: 잘못된 요청
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/MessageResponse'
  *       401:
  *         description: 인증되지 않은 요청
  */
