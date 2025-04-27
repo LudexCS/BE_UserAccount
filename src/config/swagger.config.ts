@@ -1,4 +1,3 @@
-// src/config/swagger.config.ts
 import swaggerJsdoc from 'swagger-jsdoc';
 import {SwaggerOptions} from "swagger-ui-express";
 
@@ -43,10 +42,14 @@ export const swaggerUiOptions: SwaggerOptions = {
     customCss: '.swagger-ui .topbar { display: none }',
     customSiteTitle: "API 문서",
     swaggerOptions: {
+        requestInterceptor: (req: any) => {
+            req.credentials = 'include';
+            return req;
+        },
         persistAuthorization: true,
         displayRequestDuration: true,
         filter: true,
         withCredentials: true,
-        defaultModelsExpandDepth: 1
+        defaultModelsExpandDepth: 1,
     }
 };
