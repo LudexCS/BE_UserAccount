@@ -6,6 +6,8 @@ import validationRoute from "./route/validation.route";
 import jwtGuard from "./middleware/jwt.guard";
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import { specs, swaggerUiOptions } from './config/swagger.config';
 
 const app : Express = express();
 app.use(express.json());
@@ -15,6 +17,10 @@ app.use(cors({
     credentials: true,
     exposedHeaders: ["authorization", "set-cookie"]
 }));
+
+// Swagger UI 설정
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
+
 
 // '/api/protected/*'이면 인증 미들웨어를 거침
 app.use('/api/protected', jwtGuard);
