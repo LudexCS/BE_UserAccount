@@ -55,6 +55,12 @@ import {
  *         repeatPassword:
  *           type: string
  *           description: 비밀번호 확인
+ *     MessageResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: 응답 메시지
  */
 
 const router: Router = Router();
@@ -88,10 +94,7 @@ const router: Router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/MessageResponse'
  */
 router.post('/request', async (req: Request, res: Response) => {
     try {
@@ -178,10 +181,7 @@ router.post('/verify', async (req: Request, res: Response): Promise<void> => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               $ref: '#/components/schemas/MessageResponse'
  */
 router.post('/signup', async (req: Request, res: Response) => {
     try {
