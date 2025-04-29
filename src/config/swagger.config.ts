@@ -8,6 +8,14 @@ const options = {
       title: 'Account API',
       version: '1.0.0',
       description: '계정 관리 API 문서',
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
+      contact: {
+        name: "UserAccount",
+        url: "https://github.com/LudexCS/BE_UserAccount.git",
+      }
     },
     servers: [
       {
