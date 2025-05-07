@@ -4,6 +4,17 @@
 var grpc = require('@grpc/grpc-js');
 var auth_pb = require('./auth_pb.js');
 
+function serialize_useraccount_AdminAuthResponse(arg) {
+  if (!(arg instanceof auth_pb.AdminAuthResponse)) {
+    throw new Error('Expected argument of type useraccount.AdminAuthResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_useraccount_AdminAuthResponse(buffer_arg) {
+  return auth_pb.AdminAuthResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_useraccount_AuthRequest(arg) {
   if (!(arg instanceof auth_pb.AuthRequest)) {
     throw new Error('Expected argument of type useraccount.AuthRequest');
@@ -71,6 +82,17 @@ var AuthServiceService = exports.AuthServiceService = {
     requestDeserialize: deserialize_useraccount_EmailRequest,
     responseSerialize: serialize_useraccount_UserIdResponse,
     responseDeserialize: deserialize_useraccount_UserIdResponse,
+  },
+  adminAuthByJWT: {
+    path: '/useraccount.AuthService/AdminAuthByJWT',
+    requestStream: false,
+    responseStream: false,
+    requestType: auth_pb.AuthRequest,
+    responseType: auth_pb.AdminAuthResponse,
+    requestSerialize: serialize_useraccount_AuthRequest,
+    requestDeserialize: deserialize_useraccount_AuthRequest,
+    responseSerialize: serialize_useraccount_AdminAuthResponse,
+    responseDeserialize: deserialize_useraccount_AdminAuthResponse,
   },
 };
 
