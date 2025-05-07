@@ -1,9 +1,10 @@
 import * as grpc from '@grpc/grpc-js';
-import { AuthResponse, UserIdResponse } from '../generated/auth_pb';
+import {AdminAuthResponse, AuthResponse, UserIdResponse} from '../generated/auth_pb';
 import { AuthServiceService, IAuthServiceServer } from '../generated/auth_grpc_pb';
 import { verifyToken } from "../service/jwt.service";
 import { JwtPayload } from "jsonwebtoken";
 import {findIdByEmail} from "../repository/account.repository";
+import {JwtPayloadDto} from "../dto/jwtPayload.dto";
 
 const authServiceImpl: IAuthServiceServer = {
     authByJWT: (call, callback) => {
@@ -38,7 +39,31 @@ const authServiceImpl: IAuthServiceServer = {
         } catch (error) {
             callback(error as Error, null);
         }
-    }
+    },
+    adminAuthByJWT: async (call, callback) => {
+        const jwt = call.request.getJwt();
+
+        // "Bearer " 제거
+        const token = jwt.split(' ')[1];
+
+        const payload: JwtPayloadDto = verifyToken(token) as JwtPayloadDto;
+        const email = payload.sub;
+        const role = payload.role;
+
+        if (!email || role !== 'ADMIN') {
+            return callback(new Error('Unauthorized: ADMIN role required'), null);
+        }
+
+        const userId = await findIdByEmail(email);
+        if (!userId) {
+            return callback(new Error('User not found'), null);
+        }
+
+        const res = new AdminAuthResponse();
+        res.setUserId(userId);
+
+        callback(null, res);
+    },
 };
 
 export async function startGrpcServer() {
