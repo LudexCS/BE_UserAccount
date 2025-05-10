@@ -18,7 +18,12 @@ message UserIdResponse {
   int64 user_id = 1;
 }
 
+message AdminAuthResponse {
+  int64 user_id = 1;
+}
+
 service AuthService {
   rpc AuthByJWT(AuthRequest) returns (AuthResponse);
   rpc GetUserIdByEmail(EmailRequest) returns (UserIdResponse);
+  rpc AdminAuthByJWT(AuthRequest) returns (AdminAuthResponse);
 }

@@ -85,3 +85,23 @@ export namespace UserIdResponse {
         userId: number,
     }
 }
+
+export class AdminAuthResponse extends jspb.Message { 
+    getUserId(): number;
+    setUserId(value: number): AdminAuthResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): AdminAuthResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: AdminAuthResponse): AdminAuthResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: AdminAuthResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): AdminAuthResponse;
+    static deserializeBinaryFromReader(message: AdminAuthResponse, reader: jspb.BinaryReader): AdminAuthResponse;
+}
+
+export namespace AdminAuthResponse {
+    export type AsObject = {
+        userId: number,
+    }
+}
