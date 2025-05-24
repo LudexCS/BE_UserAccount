@@ -19,7 +19,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://3.37.46.45:30300',
+        url: 'http://16.184.9.194:30300',
         description: 'API 서버'
       }
     ],
