@@ -1,3 +1,3 @@
-export interface accountEditDto {
+export interface AccountEditDto {
     nickname?: string;
 }

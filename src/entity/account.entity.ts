@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import {accountEditDto} from "../dto/accontEdit.dto";
+import {AccountEditDto} from "../dto/accontEdit.dto";
 
 export enum Role {
     USER = 'USER',
@@ -33,7 +33,7 @@ export class Account {
 }
 
 
-export const toAccountEntity = (dto: accountEditDto): Partial<Account> => {
+export const toAccountEntity = (dto: AccountEditDto): Partial<Account> => {
     const entity: Partial<Account> = {};
     if (dto.nickname !== undefined) entity.nickname = dto.nickname;
     return entity;
