@@ -5,7 +5,7 @@ import {Account, toAccountEntity} from "../entity/account.entity";
 import {CryptoWallet} from "../entity/crypto_wallet.entity";
 import {findByUserId} from "../repository/crypto_wallet.repository";
 import {CryptoWalletDto, toCryptoWalletDto} from "../dto/cryptoWallet.dto";
-import {accountEditDto} from "../dto/accontEdit.dto";
+import {AccountEditDto} from "../dto/accontEdit.dto";
 
 export const findAccount = async (email: string): Promise<AccountDto> => {
     try {
@@ -29,7 +29,7 @@ export async function deleteAccount(email: string): Promise<void> {
 
 export const updateUserData = async (req: Request, res: Response) => {
     const email = req.user as string;
-    const dto = JSON.parse(req.body.json);
+    const dto = req.body as AccountEditDto;
     const userId = await findIdByEmail(email);
     if (!userId) throw new Error("User not found");
 
