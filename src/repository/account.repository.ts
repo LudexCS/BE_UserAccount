@@ -58,4 +58,16 @@ export async function deleteAccountByEmail(email: string): Promise<void> {
     }
 
     await accountRepo.delete({ id: account.id });
-}
+};
+
+export const updateAccountFields = async (
+    userId: number,
+    partialUpdate: Partial<Account>
+): Promise<void> => {
+    try {
+        await accountRepo.update({ id: userId }, partialUpdate);
+    } catch (error) {
+        console.error("Failed to update user fields:", error);
+        throw new Error("Failed to update user fields in database");
+    }
+};
