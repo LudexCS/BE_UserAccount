@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {UserEditDto} from "../dto/accontEdit.dto";
 
 export enum Role {
     USER = 'USER',
@@ -30,3 +31,10 @@ export class Account {
     @Column({ name: 'registered_at' })
     registeredAt: Date;
 }
+
+
+export const toAccountEntity = (dto: UserEditDto): Partial<Account> => {
+    const entity: Partial<Account> = {};
+    if (dto.nickname !== undefined) entity.nickname = dto.nickname;
+    return entity;
+};

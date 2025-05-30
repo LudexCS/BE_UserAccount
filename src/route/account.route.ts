@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
 import {AccountDto} from "../dto/account.dto";
 import {deleteAccountControl, getAccountControl} from "../controller/account.controller";
+import {updateUserData} from "../service/account.service";
 
 /**
  * @swagger
@@ -113,6 +114,58 @@ router.delete('/delete', async (req: Request, res: Response) => {
     try {
         await deleteAccountControl(req);
         res.status(200).json({ message: '계정 삭제 완료' });
+    } catch (err) {
+        res.status(400).json({ message: (err as Error).message });
+    }
+});
+
+
+/**
+ * @swagger
+ * /edit:
+ *   put:
+ *     summary: 회원 정보 수정
+ *     description: JWT로 인증된 사용자의 nickname을 수정합니다. 추후 다른 필드도 확장될 수 있습니다.
+ *     tags:
+ *       - Account
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nickname:
+ *                 type: string
+ *                 example: "new_nickname"
+ *     responses:
+ *       200:
+ *         description: 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User updated successfully
+ *       400:
+ *         description: 잘못된 요청 또는 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ */
+router.put('/edit', async (req, res) => {
+    try {
+        await updateUserData(req, res);
+        res.status(200).json({ message: 'User updated successfully' });
     } catch (err) {
         res.status(400).json({ message: (err as Error).message });
     }
