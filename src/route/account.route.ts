@@ -122,12 +122,11 @@ router.delete('/delete', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /edit:
+ * /api/protected/account/edit:
  *   put:
  *     summary: 회원 정보 수정
  *     description: JWT로 인증된 사용자의 nickname을 수정합니다. 추후 다른 필드도 확장될 수 있습니다.
- *     tags:
- *       - Account
+ *     tags: [Account]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
