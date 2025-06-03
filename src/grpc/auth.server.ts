@@ -13,7 +13,17 @@ const authServiceImpl: IAuthServiceServer = {
         // "Bearer " 제거
         const token = jwt.split(' ')[1];
 
-        const payload: JwtPayload = verifyToken(token);
+        let payload: JwtPayload;
+        try {
+            payload = verifyToken(token);
+        } catch (error) {
+            console.error("JWT verification failed:", error);
+            return callback({
+                code: grpc.status.UNAUTHENTICATED,
+                message: 'Invalid or expired token'
+            }, null);
+        }
+
         const email = payload.sub;
         if (!email) {
             return callback(new Error('Invalid JWT payload: missing email'), null);
@@ -46,7 +56,17 @@ const authServiceImpl: IAuthServiceServer = {
         // "Bearer " 제거
         const token = jwt.split(' ')[1];
 
-        const payload: JwtPayloadDto = verifyToken(token) as JwtPayloadDto;
+        let payload: JwtPayloadDto;
+        try {
+            payload = verifyToken(token) as JwtPayloadDto;
+        } catch (error) {
+            console.error("JWT verification failed:", error);
+            return callback({
+                code: grpc.status.UNAUTHENTICATED,
+                message: 'Invalid or expired token'
+            }, null);
+        }
+
         const email = payload.sub;
         const role = payload.role;
 
