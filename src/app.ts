@@ -19,16 +19,16 @@ app.use(cors({
 }));
 
 // Swagger UI 설정
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
+app.use('/useraccount/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
 
 
 // '/api/protected/*'이면 인증 미들웨어를 거침
-app.use('/api/protected', jwtGuard);
+app.use('/useraccount/api/protected', jwtGuard);
 
 // '/api/auth/*'(/login, /logout, /reissue)의 경우 인증이 불필요하기에 제외
-app.use('/api/auth', authRoute);
-app.use('/api/protected/account', accountRoute);
-app.use('/api/register', registerRoute);
-app.use('/api/validation', validationRoute);
+app.use('/useraccount/api/auth', authRoute);
+app.use('/useraccount/api/protected/account', accountRoute);
+app.use('/useraccount/api/register', registerRoute);
+app.use('/useraccount/api/validation', validationRoute);
 
 export default app;
