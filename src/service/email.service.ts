@@ -58,7 +58,7 @@ export const sendVerificationEmail = async (email: string) => {
               <body style="font-family: 'Apple SD Gothic Neo', Arial, sans-serif; background-color: #f6f6f6; padding: 40px;">
                 <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 40px; text-align: center;">
                   
-                  <h2 style="color: #2D6FF2; font-size: 28px; font-weight: bold; margin-bottom: 30px;">Ludex</h2>
+                  <h2 style="color: #2D6FF2; font-size: 36px; font-weight: bold; margin-bottom: 40px;">Ludex</h2>
             
                   <p style="color: #333; font-size: 16px; margin-bottom: 10px;">
                     <strong>Ludex ${purpose}</strong>을 위해 인증번호를 보내드려요.<br/>이메일 인증 화면에서 아래의 인증 번호를 입력하고 인증을 완료해주세요.
