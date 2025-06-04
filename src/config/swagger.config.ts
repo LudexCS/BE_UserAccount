@@ -19,7 +19,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://16.184.9.194:30300',
+        url: 'https://api.uosludex.com/useraccount',
         description: 'API 서버'
       }
     ],
