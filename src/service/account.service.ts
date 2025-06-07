@@ -13,7 +13,7 @@ export const findAccount = async (email: string): Promise<AccountDto> => {
         const wallet: CryptoWallet[] = await findByUserId(account.id);
         const accountWallet: CryptoWalletDto[] = wallet.map(w =>
             toCryptoWalletDto(w.address, w.registeredAt));
-        return toAccountDto(email, account.nickname, accountWallet);
+        return toAccountDto(email, account.nickname, account.ownerId, accountWallet);
     } catch (error) {
         throw error;
     }
