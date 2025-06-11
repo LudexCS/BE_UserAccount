@@ -25,5 +25,7 @@ RUN npm run build
 # 8. 컨테이너가 실행될 때 사용할 기본 명령어 설정
 CMD ["node", "dist/server.js"]
 
+ENV TZ=Asia/Seoul
+
 # 9. 컨테이너에서 사용할 포트 지정
 EXPOSE 3000
