@@ -28,8 +28,14 @@ export class Account {
     })
     role: Role;
 
+    @Column({ name: 'is_blocked', default: false })
+    isBlocked: boolean;
+
     @Column({ name: 'registered_at' })
     registeredAt: Date;
+
+    @Column({ name: 'owner_id', nullable: true })
+    ownerId: string;
 }
 
 
